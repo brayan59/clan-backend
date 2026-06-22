@@ -9,6 +9,9 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.DB_NAME || 'reclutamiento';
+const ADMIN_PIN = process.env.ADMIN_PIN || 'Beta.090807';
+const FF_USERUID = process.env.FF_USERUID;
+const FF_APIKEY = process.env.FF_APIKEY;
 
 let db;
 
@@ -78,6 +81,35 @@ app.patch('/api/postulaciones/:id', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error al actualizar.' });
+  }
+});
+
+// Verificar PIN de admin (sin exponer el PIN en el frontend)
+app.post('/api/admin/login', (req, res) => {
+  const { pin } = req.body;
+  if (pin === ADMIN_PIN) {
+    res.json({ success: true });
+  } else {
+    res.status(401).json({ success: false, error: 'PIN incorrecto.' });
+  }
+});
+
+// Proxy seguro hacia la API de Free Fire (oculta las claves)
+app.get('/api/freefire', async (req, res) => {
+  try {
+    const { uid, region } = req.query;
+    if (!uid || !region) {
+      return res.status(400).json({ error: 'Faltan uid o region.' });
+    }
+
+    const url = `https://proapis.hlgamingofficial.com/main/games/freefire/account/api?sectionName=AllData&PlayerUid=${encodeURIComponent(uid)}&region=${encodeURIComponent(region)}&useruid=${encodeURIComponent(FF_USERUID)}&api=${encodeURIComponent(FF_APIKEY)}`;
+
+    const ffRes = await fetch(url);
+    const data = await ffRes.json();
+    res.status(ffRes.status).json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al consultar Free Fire API.' });
   }
 });
 
