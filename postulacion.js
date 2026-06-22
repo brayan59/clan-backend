@@ -1,7 +1,4 @@
-
-// ⚠️ CONFIGURA AQUÍ TUS DATOS
-const FF_USERUID = "7tAYqrJnk7UZ9FmijLwkD3EAwjv1";
-const FF_APIKEY = "VMT3PNEwdunP3pM6fJ4e45Df9fNfWl";
+// ⚠️ CONFIGURA AQUÍ TU URL DE BACKEND
 const BACKEND_URL = "https://clan-backend-cpu4.onrender.com"; // tu URL de Render
 
 let accountInfo = null;
@@ -52,7 +49,7 @@ async function verificarUID(){
   btn.disabled = true;
   loading1.style.display = 'block';
 
-  const url = `https://proapis.hlgamingofficial.com/main/games/freefire/account/api?sectionName=AllData&PlayerUid=${encodeURIComponent(uid)}&region=${encodeURIComponent(region)}&useruid=${encodeURIComponent(FF_USERUID)}&api=${encodeURIComponent(FF_APIKEY)}`;
+  const url = `${BACKEND_URL}/api/freefire?uid=${encodeURIComponent(uid)}&region=${encodeURIComponent(region)}`;
 
   try{
     const res = await fetch(url);
