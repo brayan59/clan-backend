@@ -1,16 +1,28 @@
-
 // ⚠️ Cambia este PIN por el que tú quieras
-const ADMIN_PIN = "brayan.070809";
 const BACKEND_URL = "https://clan-backend-cpu4.onrender.com"; // tu URL de Render
 
-function login(){
+async function login(){
   const pin = document.getElementById('pin').value;
-  if(pin === ADMIN_PIN){
-    document.getElementById('loginCard').style.display = 'none';
-    document.getElementById('container').style.display = 'block';
-    cargar();
-  } else {
-    document.getElementById('loginError').textContent = 'PIN incorrecto.';
+  const loginError = document.getElementById('loginError');
+  loginError.textContent = '';
+
+  try{
+    const res = await fetch(`${BACKEND_URL}/api/admin/login`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ pin })
+    });
+    const data = await res.json();
+
+    if(data.success){
+      document.getElementById('loginCard').style.display = 'none';
+      document.getElementById('container').style.display = 'block';
+      cargar();
+    } else {
+      loginError.textContent = data.error || 'PIN incorrecto.';
+    }
+  }catch(err){
+    loginError.textContent = 'Error al validar el PIN: ' + err.message;
   }
 }
 
@@ -23,7 +35,7 @@ async function cargar(){
 
     lista.forEach((p, i) => {
       const tel = (p.telefono || '').replace(/\D/g,'');
-      const msg = encodeURIComponent(`¡Hola ${p.nombreReal}! Fuiste aceptado en el clan. Te esperamos hoy a la hora indicada en el juego. Únete al grupo: https://chat.whatsapp.com/Hy6ELgIvIwvJ5wFCQaoJYr`);
+      const msg = encodeURIComponent(`¡Hola ${p.nombreReal}! Fuiste aceptado en el clan. Te esperamos hoy a la hora indicada en el juego. Únete al grupo: [LINK_DEL_GRUPO]`);
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${i+1}</td>
