@@ -1,1 +1,88 @@
 
+:root{
+    --bg:#0d1117;
+    --panel:#161b22;
+    --accent:#ff6b35;
+    --accent2:#2dd4a8;
+    --text:#e6edf3;
+    --muted:#8b949e;
+    --danger:#ff6b6b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', Roboto, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding:24px;
+  }
+  .login-card{
+    max-width:360px;
+    margin:80px auto;
+    background:var(--panel);
+    border:1px solid #30363d;
+    border-radius:14px;
+    padding:32px;
+  }
+  .login-card input{
+    width:100%;
+    padding:11px 12px;
+    border-radius:8px;
+    border:1px solid #30363d;
+    background:#0d1117;
+    color:var(--text);
+    font-size:15px;
+    margin-bottom:14px;
+  }
+  .login-card button, .top-bar button{
+    width:100%;
+    padding:11px;
+    border:none;
+    border-radius:8px;
+    background:var(--accent);
+    color:#0d1117;
+    font-weight:600;
+    cursor:pointer;
+  }
+  h1{color:var(--accent); font-size:22px;}
+  .container{display:none; max-width:1000px; margin:0 auto;}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--panel);
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:16px;
+  }
+  th, td{
+    padding:10px 12px;
+    text-align:left;
+    border-bottom:1px solid #21262d;
+    font-size:13px;
+  }
+  th{color:var(--muted); font-weight:600;}
+  tr:hover{background:#1c2128;}
+  .badge{
+    padding:3px 8px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:600;
+  }
+  .badge.pendiente{background:#3d2e0e; color:#f0b429;}
+  .badge.aceptado{background:#0e3d1f; color:var(--accent2);}
+  .badge.rechazado{background:#3d0e0e; color:var(--danger);}
+  .actions button{
+    padding:5px 10px;
+    border:none;
+    border-radius:6px;
+    font-size:12px;
+    cursor:pointer;
+    margin-right:4px;
+    color:#0d1117;
+    font-weight:600;
+  }
+  .btn-aceptar{background:var(--accent2);}
+  .btn-rechazar{background:var(--danger);}
+  .btn-whatsapp{background:#25D366;}
+  .error{color:var(--danger); margin-top:10px;}
+  .refresh{margin-top:16px; background:#21262d; color:var(--text); border:1px solid #30363d;}
