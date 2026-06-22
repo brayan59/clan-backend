@@ -1,6 +1,6 @@
 
 // ⚠️ Cambia este PIN por el que tú quieras
-const ADMIN_PIN = "1234";
+const ADMIN_PIN = "brayan.070809";
 const BACKEND_URL = "https://clan-backend-cpu4.onrender.com"; // tu URL de Render
 
 function login(){
@@ -23,7 +23,7 @@ async function cargar(){
 
     lista.forEach((p, i) => {
       const tel = (p.telefono || '').replace(/\D/g,'');
-      const msg = encodeURIComponent(`¡Hola ${p.nombreReal}! Fuiste aceptado en el clan. Te esperamos hoy a la hora indicada en el juego. Únete al grupo: [LINK_DEL_GRUPO]`);
+      const msg = encodeURIComponent(`¡Hola ${p.nombreReal}! Fuiste aceptado en el clan. Te esperamos hoy a la hora indicada en el juego. Únete al grupo: https://chat.whatsapp.com/Hy6ELgIvIwvJ5wFCQaoJYr`);
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${i+1}</td>
