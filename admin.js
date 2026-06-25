@@ -81,17 +81,17 @@ async function cargar(){
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${i+1}</td>
-        <td>${p.nombreReal}</td>
-        <td>${p.apodo}</td>
-        <td>${p.uid}</td>
-        <td>${p.brRankPoint}</td>
-        <td>${p.csRankPoint}</td>
-        <td>${p.cambioNombre || '-'}</td>
-        <td style="font-size:11px">${p.experienciaTorneos}</td>
-        <td>${p.experienciaPvp}</td>
-        <td><strong>${p.puntajeFinal}</strong></td>
-        <td><span class="badge ${p.estado}">${p.estado}</span></td>
+        <td data-label="#">${i+1}</td>
+        <td data-label="Nombre">${p.nombreReal}</td>
+        <td data-label="Apodo">${p.apodo}</td>
+        <td data-label="UID">${p.uid}</td>
+        <td data-label="BR pts">${p.brRankPoint}</td>
+        <td data-label="CS pts">${p.csRankPoint}</td>
+        <td data-label="Cambia nombre">${p.cambioNombre || '-'}</td>
+        <td data-label="Torneos">${p.experienciaTorneos}</td>
+        <td data-label="PvP">${p.experienciaPvp}</td>
+        <td data-label="Puntaje"><strong>${p.puntajeFinal}</strong></td>
+        <td data-label="Estado"><span class="badge ${p.estado}">${p.estado}</span></td>
         <td class="actions">
           <button class="btn-aceptar" onclick="cambiarEstado('${p._id}','aceptado')">Aceptar</button>
           <button class="btn-rechazar" onclick="cambiarEstado('${p._id}','rechazado')">Rechazar</button>
