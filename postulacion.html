@@ -9,10 +9,15 @@
 <body>
   <div class="card">
 
+    <div class="progress-wrap" id="progressWrap" style="display:none;">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label">Puntaje acumulado: <span id="puntajeLabel">0</span> / 100</div>
+    </div>
+
     <!-- PASO 1: UID -->
     <div class="step active" id="step1">
       <h1>🎮 Postulación al Clan</h1>
-      <p class="sub">Paso 1: verifica tu cuenta de Free Fire</p>
+      <p class="sub">Paso 1: verifica tu cuenta de Free Fire (obligatorio)</p>
 
       <label>UID de Free Fire</label>
       <input id="uid" type="text" inputmode="numeric" placeholder="Ej: 9351564274">
@@ -43,51 +48,117 @@
       <div class="confirm-box" id="perfilInfo"></div>
       <div class="btn-row">
         <button class="secondary" onclick="volverPaso1()">No es mi cuenta</button>
-        <button onclick="irPaso3()">Sí, es mi cuenta</button>
+        <button onclick="irPasoEncuesta(0)">Sí, es mi cuenta</button>
       </div>
     </div>
 
-    <!-- PASO 3: DATOS PERSONALES -->
-    <div class="step" id="step3">
-      <h1>Datos personales</h1>
-      <p class="sub">Paso 2: cuéntanos sobre ti</p>
-
-      <label>Nombre real</label>
+    <!-- PREGUNTA: NOMBRE REAL (opcional) -->
+    <div class="step" id="q_nombre">
+      <h1>Pregunta 1 de 7</h1>
+      <p class="sub">¿Cuál es tu nombre real? <span class="tag-opcional">Opcional · +10 pts</span></p>
       <input id="nombreReal" type="text" placeholder="Tu nombre completo">
+      <div class="btn-row">
+        <button class="secondary" onclick="saltar('nombreReal', 10, 'q_apodo')">Saltar</button>
+        <button onclick="responder('nombreReal', 10, 'q_apodo')">Continuar</button>
+      </div>
+    </div>
 
-      <label>Apodo / Nickname</label>
-      <input id="apodo" type="text" placeholder="Cómo te conocen">
+    <!-- PREGUNTA: APODO (opcional) -->
+    <div class="step" id="q_apodo">
+      <h1>Pregunta 2 de 7</h1>
+      <p class="sub">¿Cómo te gustaría que te digan? (apodo) <span class="tag-opcional">Opcional · +10 pts</span></p>
+      <input id="apodo" type="text" placeholder="Tu apodo">
+      <div class="btn-row">
+        <button class="secondary" onclick="saltar('apodo', 10, 'q_whatsapp')">Saltar</button>
+        <button onclick="responder('apodo', 10, 'q_whatsapp')">Continuar</button>
+      </div>
+    </div>
 
-      <label>Número de teléfono (WhatsApp)</label>
+    <!-- PREGUNTA: WHATSAPP (obligatorio) -->
+    <div class="step" id="q_whatsapp">
+      <h1>Pregunta 3 de 7</h1>
+      <p class="sub">Tu número de WhatsApp <span class="tag-obligatorio">Obligatorio · +10 pts</span></p>
       <input id="telefono" type="tel" placeholder="Ej: 7771234567">
+      <div class="error" id="error_whatsapp"></div>
+      <div class="btn-row">
+        <button onclick="responderObligatorio('telefono','error_whatsapp', 10, 'q_cambionombre')">Continuar</button>
+      </div>
+    </div>
 
-      <label>Tasa de headshot (%)</label>
-      <input id="headshot" type="number" min="0" max="100" placeholder="Ej: 35">
-
-      <label>¿Tienes experiencia en torneos de mapa abierto?</label>
-      <select id="torneoAbierto">
-        <option value="si">Sí</option>
-        <option value="no">No</option>
+    <!-- PREGUNTA: CAMBIO DE NOMBRE -->
+    <div class="step" id="q_cambionombre">
+      <h1>Pregunta 4 de 7</h1>
+      <p class="sub">¿Puedes cambiar tu nombre en el juego para poner las iniciales del clan? <span class="tag-obligatorio">+20 pts si dices sí</span></p>
+      <select id="cambioNombre">
+        <option value="si">Sí, puedo cambiarlo</option>
+        <option value="no">No puedo / no quiero</option>
       </select>
+      <div class="btn-row">
+        <button onclick="responderSiNo('cambioNombre', 20, 'q_pvp')">Continuar</button>
+      </div>
+    </div>
 
-      <label>¿Tienes experiencia en torneos de mapa rotativo?</label>
-      <select id="torneoRotativo">
-        <option value="si">Sí</option>
-        <option value="no">No</option>
-      </select>
-
-      <label>¿Tienes experiencia en PvP competitivo?</label>
+    <!-- PREGUNTA: PVP -->
+    <div class="step" id="q_pvp">
+      <h1>Pregunta 5 de 7</h1>
+      <p class="sub">¿Tienes experiencia en PvP competitivo? <span class="tag-obligatorio">+15 pts si dices sí</span></p>
       <select id="pvp">
         <option value="si">Sí</option>
         <option value="no">No</option>
       </select>
+      <div class="btn-row">
+        <button onclick="responderSiNo('pvp', 15, 'q_abierto')">Continuar</button>
+      </div>
+    </div>
 
-      <button onclick="enviarPostulacion()" id="btnEnviar">Enviar postulación</button>
+    <!-- PREGUNTA: MAPA ABIERTO -->
+    <div class="step" id="q_abierto">
+      <h1>Pregunta 6 de 7</h1>
+      <p class="sub">¿Tienes experiencia en torneos de mapa abierto? <span class="tag-obligatorio">+15 pts si dices sí</span></p>
+      <select id="mapaAbierto">
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+      </select>
+      <div class="btn-row">
+        <button onclick="responderSiNo('mapaAbierto', 15, 'q_rotativo')">Continuar</button>
+      </div>
+    </div>
+
+    <!-- PREGUNTA: MAPA ROTATIVO -->
+    <div class="step" id="q_rotativo">
+      <h1>Pregunta 7 de 7</h1>
+      <p class="sub">¿Tienes experiencia en torneos de mapa rotativo? <span class="tag-obligatorio">+20 pts si dices sí</span></p>
+      <select id="mapaRotativo">
+        <option value="si">Sí</option>
+        <option value="no">No</option>
+      </select>
+      <div class="btn-row">
+        <button onclick="responderSiNo('mapaRotativo', 20, 'q_reglamento')">Continuar</button>
+      </div>
+    </div>
+
+    <!-- REGLAMENTO -->
+    <div class="step" id="q_reglamento">
+      <h1>📜 Reglamento del Clan</h1>
+      <div class="reglamento-box">
+        <p>Al entrar al clan aceptas las siguientes reglas:</p>
+        <ul>
+          <li>Debes poner las iniciales del clan en tu nombre del juego.</li>
+          <li>Tienes 30 días hábiles desde que entras al clan para conseguir 150 puntos en Guerra de Clanes.</li>
+          <li>En días de Guerra de Clanes, es obligatorio jugar únicamente ese modo.</li>
+          <li>Si te sorprenden jugando otro modo en día de guerra, serás expulsado del clan.</li>
+        </ul>
+      </div>
+      <label class="checkbox-row">
+        <input type="checkbox" id="aceptaReglamento" onchange="toggleEnviar()">
+        He leído y acepto el reglamento del clan
+      </label>
+      <button onclick="enviarPostulacion()" id="btnEnviar" disabled>Enviar postulación</button>
       <div class="loading" id="loading3">Enviando…</div>
       <div class="error" id="error3"></div>
     </div>
 
-    <!-- PASO 4: CONFIRMACIÓN -->
+    <!-- CONFIRMACIÓN -->
     <div class="step success" id="step4">
       <h2>✅ ¡Postulación enviada!</h2>
       <p>Gracias por postularte. Revisaremos tu información y te avisaremos por WhatsApp al número que registraste si fuiste seleccionado.</p>
