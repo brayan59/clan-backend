@@ -138,6 +138,7 @@ app.post('/api/postulaciones', async (req, res) => {
     const postulacion = {
       nombreReal: data.nombreReal || '(no proporcionado)',
       apodo: data.apodo || '(no proporcionado)',
+      genero: data.genero || '(no proporcionado)',
       uid: data.uid,
       region: data.region || '',
       telefono: data.telefono,
