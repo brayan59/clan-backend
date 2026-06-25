@@ -163,3 +163,53 @@
     font-weight:600;
     cursor:pointer;
   }
+
+  /* ===== RESPONSIVE: tarjetas en móvil ===== */
+  @media (max-width: 760px){
+    table thead{display:none;}
+    table, tbody, tr, td{display:block; width:100%;}
+    table{background:transparent; border-radius:0;}
+    tr{
+      background:var(--panel);
+      border:1px solid #30363d;
+      border-radius:12px;
+      margin-bottom:14px;
+      padding:14px;
+    }
+    td{
+      border-bottom:none;
+      padding:6px 0;
+      font-size:14px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    td:not(.actions)::before{
+      content: attr(data-label);
+      color:var(--muted);
+      font-weight:600;
+      font-size:12px;
+      flex-shrink:0;
+    }
+    td.actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:10px;
+    }
+    td.actions button, td.actions a{
+      margin:0;
+    }
+    td.actions a{
+      grid-column: span 1;
+    }
+    .actions button{
+      width:100%;
+      padding:12px 6px;
+      font-size:13px;
+      margin-right:0;
+    }
+    .top-header{flex-direction:column; align-items:flex-start;}
+    .top-actions{width:100%; flex-wrap:wrap;}
+    .top-actions button, .user-tag{flex:1; text-align:center;}
+  }
