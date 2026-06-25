@@ -6,6 +6,7 @@ let puntajeTotal = 0;
 let respuestas = {
   nombreReal: '',
   apodo: '',
+  genero: '',
   telefono: '',
   cambioNombre: '',
   pvp: '',
@@ -120,15 +121,40 @@ function saltar(campoId, pts, siguienteId){
   showStep(siguienteId);
 }
 
+function saltarGenero(){
+  respuestas.genero = '';
+  showStep('q_whatsapp');
+}
+
+function responderGenero(){
+  const valor = document.getElementById('genero').value;
+  respuestas.genero = valor;
+  if(valor){
+    puntajeTotal += 5;
+    actualizarBarra();
+  }
+  showStep('q_whatsapp');
+}
+
 function responderObligatorio(campoId, errorId, pts, siguienteId){
   const valor = document.getElementById(campoId).value.trim();
   const errorEl = document.getElementById(errorId);
   errorEl.style.display = 'none';
+
   if(!valor){
     errorEl.textContent = 'Este campo es obligatorio.';
     errorEl.style.display = 'block';
     return;
   }
+
+  if(campoId === 'telefono'){
+    if(!/^\d{10}$/.test(valor)){
+      errorEl.textContent = 'El número debe tener exactamente 10 dígitos, solo números.';
+      errorEl.style.display = 'block';
+      return;
+    }
+  }
+
   respuestas[campoId] = valor;
   puntajeTotal += pts;
   actualizarBarra();
@@ -149,6 +175,15 @@ function toggleEnviar(){
   document.getElementById('btnEnviar').disabled = !document.getElementById('aceptaReglamento').checked;
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const telInput = document.getElementById('telefono');
+  if(telInput){
+    telInput.addEventListener('input', () => {
+      telInput.value = telInput.value.replace(/\D/g, '').slice(0, 10);
+    });
+  }
+});
+
 async function enviarPostulacion(){
   const error3 = document.getElementById('error3');
   const loading3 = document.getElementById('loading3');
@@ -159,6 +194,7 @@ async function enviarPostulacion(){
   const payload = {
     nombreReal: respuestas.nombreReal || '(no proporcionado)',
     apodo: respuestas.apodo || '(no proporcionado)',
+    genero: respuestas.genero || '(no proporcionado)',
     telefono: respuestas.telefono,
     uid: accountInfo._uid,
     region: accountInfo._region,
