@@ -10,13 +10,22 @@
 
   <div class="login-card" id="loginCard">
     <h1>🔒 Panel Admin</h1>
-    <input id="pin" type="password" placeholder="PIN de acceso">
+    <input id="username" type="text" placeholder="Usuario">
+    <input id="password" type="password" placeholder="Contraseña">
     <button onclick="login()">Entrar</button>
     <div class="error" id="loginError"></div>
   </div>
 
   <div class="container" id="container">
-    <h1>📋 Postulantes al Clan</h1>
+    <div class="top-header">
+      <h1>📋 Postulantes al Clan</h1>
+      <div class="top-actions">
+        <span class="user-tag" id="userTag"></span>
+        <button class="secondary" id="btnGestionAdmins" onclick="abrirGestionAdmins()" style="display:none;">Gestionar admins</button>
+        <button class="secondary" onclick="logout()">Salir</button>
+      </div>
+    </div>
+
     <button class="refresh" onclick="cargar()">🔄 Actualizar lista</button>
     <table>
       <thead>
@@ -27,7 +36,7 @@
           <th>UID</th>
           <th>BR pts</th>
           <th>CS pts</th>
-          <th>HS%</th>
+          <th>Cambia nombre</th>
           <th>Torneos</th>
           <th>PvP</th>
           <th>Puntaje</th>
@@ -37,6 +46,27 @@
       </thead>
       <tbody id="tbody"></tbody>
     </table>
+  </div>
+
+  <!-- MODAL GESTIÓN DE ADMINS -->
+  <div class="modal-overlay" id="modalAdmins">
+    <div class="modal-box">
+      <h2>Gestionar administradores</h2>
+
+      <div class="add-admin-form">
+        <input id="newAdminUser" type="text" placeholder="Usuario nuevo">
+        <input id="newAdminPass" type="password" placeholder="Contraseña">
+        <button onclick="crearAdmin()">+ Crear admin</button>
+      </div>
+      <div class="error" id="adminError"></div>
+
+      <table>
+        <thead><tr><th>Usuario</th><th>Rol</th><th></th></tr></thead>
+        <tbody id="tbodyAdmins"></tbody>
+      </table>
+
+      <button class="secondary" onclick="cerrarGestionAdmins()">Cerrar</button>
+    </div>
   </div>
 
 <script src="admin.js"></script>
