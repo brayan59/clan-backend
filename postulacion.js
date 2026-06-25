@@ -2,6 +2,16 @@
 const BACKEND_URL = "https://clan-backend-cpu4.onrender.com"; // tu URL de Render
 
 let accountInfo = null;
+let puntajeTotal = 0;
+let respuestas = {
+  nombreReal: '',
+  apodo: '',
+  telefono: '',
+  cambioNombre: '',
+  pvp: '',
+  mapaAbierto: '',
+  mapaRotativo: ''
+};
 
 function pointsToRank(points){
   if(points == null) return '-';
@@ -27,9 +37,14 @@ function pointsToRank(points){
   return `${points} pts`;
 }
 
-function showStep(n){
+function showStep(id){
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step'+n).classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function actualizarBarra(){
+  document.getElementById('progressFill').style.width = puntajeTotal + '%';
+  document.getElementById('puntajeLabel').textContent = puntajeTotal;
 }
 
 async function verificarUID(){
@@ -69,7 +84,7 @@ async function verificarUID(){
       <div class="row"><span>Rango BR</span><span>${pointsToRank(info.BrRankPoint)}</span></div>
       <div class="row"><span>Rango CS</span><span>${pointsToRank(info.CsRankPoint)}</span></div>
     `;
-    showStep(2);
+    showStep('step2');
 
   }catch(err){
     error1.textContent = 'No se pudo verificar: ' + err.message;
@@ -82,58 +97,80 @@ async function verificarUID(){
 
 function volverPaso1(){
   accountInfo = null;
-  showStep(1);
+  showStep('step1');
 }
 
-function irPaso3(){
-  showStep(3);
+function irPasoEncuesta(){
+  document.getElementById('progressWrap').style.display = 'block';
+  actualizarBarra();
+  showStep('q_nombre');
+}
+
+function responder(campoId, pts, siguienteId){
+  respuestas[campoId] = document.getElementById(campoId).value.trim();
+  if(respuestas[campoId]){
+    puntajeTotal += pts;
+    actualizarBarra();
+  }
+  showStep(siguienteId);
+}
+
+function saltar(campoId, pts, siguienteId){
+  respuestas[campoId] = '';
+  showStep(siguienteId);
+}
+
+function responderObligatorio(campoId, errorId, pts, siguienteId){
+  const valor = document.getElementById(campoId).value.trim();
+  const errorEl = document.getElementById(errorId);
+  errorEl.style.display = 'none';
+  if(!valor){
+    errorEl.textContent = 'Este campo es obligatorio.';
+    errorEl.style.display = 'block';
+    return;
+  }
+  respuestas[campoId] = valor;
+  puntajeTotal += pts;
+  actualizarBarra();
+  showStep(siguienteId);
+}
+
+function responderSiNo(campoId, pts, siguienteId){
+  const valor = document.getElementById(campoId).value;
+  respuestas[campoId] = valor;
+  if(valor === 'si'){
+    puntajeTotal += pts;
+    actualizarBarra();
+  }
+  showStep(siguienteId);
+}
+
+function toggleEnviar(){
+  document.getElementById('btnEnviar').disabled = !document.getElementById('aceptaReglamento').checked;
 }
 
 async function enviarPostulacion(){
-  const nombreReal = document.getElementById('nombreReal').value.trim();
-  const apodo = document.getElementById('apodo').value.trim();
-  const telefono = document.getElementById('telefono').value.trim();
-  const headshot = parseFloat(document.getElementById('headshot').value) || 0;
-  const torneoAbierto = document.getElementById('torneoAbierto').value;
-  const torneoRotativo = document.getElementById('torneoRotativo').value;
-  const pvp = document.getElementById('pvp').value;
-
   const error3 = document.getElementById('error3');
   const loading3 = document.getElementById('loading3');
   const btn = document.getElementById('btnEnviar');
 
   error3.style.display = 'none';
 
-  if(!nombreReal || !apodo || !telefono){
-    error3.textContent = 'Completa todos los campos obligatorios.';
-    error3.style.display = 'block';
-    return;
-  }
-
-  const brRank = accountInfo.BrRankPoint || 0;
-  const csRank = accountInfo.CsRankPoint || 0;
-
-  // Cálculo simple del puntaje de competencia (ajustable)
-  let puntaje = 0;
-  puntaje += brRank * 0.4;
-  puntaje += csRank * 0.4;
-  puntaje += headshot * 5;
-  if(torneoAbierto === 'si') puntaje += 100;
-  if(torneoRotativo === 'si') puntaje += 100;
-  if(pvp === 'si') puntaje += 100;
-
   const payload = {
-    nombreReal, apodo, telefono,
+    nombreReal: respuestas.nombreReal || '(no proporcionado)',
+    apodo: respuestas.apodo || '(no proporcionado)',
+    telefono: respuestas.telefono,
     uid: accountInfo._uid,
     region: accountInfo._region,
     nombreFF: accountInfo.AccountName,
     nivelFF: accountInfo.AccountLevel,
-    brRankPoint: brRank,
-    csRankPoint: csRank,
-    tasaHeadshot: headshot,
-    experienciaTorneos: `Abierto: ${torneoAbierto}, Rotativo: ${torneoRotativo}`,
-    experienciaPvp: pvp,
-    puntajeFinal: Math.round(puntaje)
+    brRankPoint: accountInfo.BrRankPoint || 0,
+    csRankPoint: accountInfo.CsRankPoint || 0,
+    cambioNombre: respuestas.cambioNombre,
+    experienciaPvp: respuestas.pvp,
+    experienciaTorneos: `Abierto: ${respuestas.mapaAbierto}, Rotativo: ${respuestas.mapaRotativo}`,
+    aceptoReglamento: true,
+    puntajeFinal: puntajeTotal
   };
 
   btn.disabled = true;
@@ -148,13 +185,13 @@ async function enviarPostulacion(){
     const data = await res.json();
     if(!res.ok) throw new Error(data.error || 'Error al enviar.');
 
-    showStep(4);
+    showStep('step4');
 
   }catch(err){
     error3.textContent = 'No se pudo enviar tu postulación: ' + err.message;
     error3.style.display = 'block';
-  }finally{
     btn.disabled = false;
+  }finally{
     loading3.style.display = 'none';
   }
 }
