@@ -54,7 +54,7 @@
 
     <!-- PREGUNTA: NOMBRE REAL (opcional) -->
     <div class="step" id="q_nombre">
-      <h1>Pregunta 1 de 7</h1>
+      <h1>Pregunta 1 de 8</h1>
       <p class="sub">¿Cuál es tu nombre real? <span class="tag-opcional">Opcional · +10 pts</span></p>
       <input id="nombreReal" type="text" placeholder="Tu nombre completo">
       <div class="btn-row">
@@ -65,20 +65,36 @@
 
     <!-- PREGUNTA: APODO (opcional) -->
     <div class="step" id="q_apodo">
-      <h1>Pregunta 2 de 7</h1>
+      <h1>Pregunta 2 de 8</h1>
       <p class="sub">¿Cómo te gustaría que te digan? (apodo) <span class="tag-opcional">Opcional · +10 pts</span></p>
       <input id="apodo" type="text" placeholder="Tu apodo">
       <div class="btn-row">
-        <button class="secondary" onclick="saltar('apodo', 10, 'q_whatsapp')">Saltar</button>
-        <button onclick="responder('apodo', 10, 'q_whatsapp')">Continuar</button>
+        <button class="secondary" onclick="saltar('apodo', 10, 'q_genero')">Saltar</button>
+        <button onclick="responder('apodo', 10, 'q_genero')">Continuar</button>
+      </div>
+    </div>
+
+    <!-- PREGUNTA: GÉNERO -->
+    <div class="step" id="q_genero">
+      <h1>Pregunta 3 de 8</h1>
+      <p class="sub">¿Cuál es tu género? <span class="tag-opcional">Opcional · +5 pts</span></p>
+      <select id="genero">
+        <option value="">Selecciona…</option>
+        <option value="masculino">Masculino</option>
+        <option value="femenino">Femenino</option>
+        <option value="otro">Otro / prefiero no decir</option>
+      </select>
+      <div class="btn-row">
+        <button class="secondary" onclick="saltarGenero()">Saltar</button>
+        <button onclick="responderGenero()">Continuar</button>
       </div>
     </div>
 
     <!-- PREGUNTA: WHATSAPP (obligatorio) -->
     <div class="step" id="q_whatsapp">
-      <h1>Pregunta 3 de 7</h1>
-      <p class="sub">Tu número de WhatsApp <span class="tag-obligatorio">Obligatorio · +10 pts</span></p>
-      <input id="telefono" type="tel" placeholder="Ej: 7771234567">
+      <h1>Pregunta 4 de 8</h1>
+      <p class="sub">Tu número de WhatsApp (10 dígitos) <span class="tag-obligatorio">Obligatorio · +10 pts</span></p>
+      <input id="telefono" type="tel" inputmode="numeric" maxlength="10" placeholder="Ej: 7771234567">
       <div class="error" id="error_whatsapp"></div>
       <div class="btn-row">
         <button onclick="responderObligatorio('telefono','error_whatsapp', 10, 'q_cambionombre')">Continuar</button>
@@ -87,7 +103,7 @@
 
     <!-- PREGUNTA: CAMBIO DE NOMBRE -->
     <div class="step" id="q_cambionombre">
-      <h1>Pregunta 4 de 7</h1>
+      <h1>Pregunta 5 de 8</h1>
       <p class="sub">¿Puedes cambiar tu nombre en el juego para poner las iniciales del clan? <span class="tag-obligatorio">+20 pts si dices sí</span></p>
       <select id="cambioNombre">
         <option value="si">Sí, puedo cambiarlo</option>
@@ -100,7 +116,7 @@
 
     <!-- PREGUNTA: PVP -->
     <div class="step" id="q_pvp">
-      <h1>Pregunta 5 de 7</h1>
+      <h1>Pregunta 6 de 8</h1>
       <p class="sub">¿Tienes experiencia en PvP competitivo? <span class="tag-obligatorio">+15 pts si dices sí</span></p>
       <select id="pvp">
         <option value="si">Sí</option>
@@ -113,7 +129,7 @@
 
     <!-- PREGUNTA: MAPA ABIERTO -->
     <div class="step" id="q_abierto">
-      <h1>Pregunta 6 de 7</h1>
+      <h1>Pregunta 7 de 8</h1>
       <p class="sub">¿Tienes experiencia en torneos de mapa abierto? <span class="tag-obligatorio">+15 pts si dices sí</span></p>
       <select id="mapaAbierto">
         <option value="si">Sí</option>
@@ -126,14 +142,14 @@
 
     <!-- PREGUNTA: MAPA ROTATIVO -->
     <div class="step" id="q_rotativo">
-      <h1>Pregunta 7 de 7</h1>
-      <p class="sub">¿Tienes experiencia en torneos de mapa rotativo? <span class="tag-obligatorio">+20 pts si dices sí</span></p>
+      <h1>Pregunta 8 de 8</h1>
+      <p class="sub">¿Tienes experiencia en torneos de mapa rotativo? <span class="tag-obligatorio">+15 pts si dices sí</span></p>
       <select id="mapaRotativo">
         <option value="si">Sí</option>
         <option value="no">No</option>
       </select>
       <div class="btn-row">
-        <button onclick="responderSiNo('mapaRotativo', 20, 'q_reglamento')">Continuar</button>
+        <button onclick="responderSiNo('mapaRotativo', 15, 'q_reglamento')">Continuar</button>
       </div>
     </div>
 
