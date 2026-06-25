@@ -84,6 +84,7 @@ async function cargar(){
         <td data-label="#">${i+1}</td>
         <td data-label="Nombre">${p.nombreReal}</td>
         <td data-label="Apodo">${p.apodo}</td>
+        <td data-label="Género">${p.genero || '-'}</td>
         <td data-label="UID">${p.uid}</td>
         <td data-label="BR pts">${p.brRankPoint}</td>
         <td data-label="CS pts">${p.csRankPoint}</td>
