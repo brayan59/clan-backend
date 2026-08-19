@@ -69,7 +69,7 @@ async function cargar(){
 
     lista.forEach((p, i) => {
       const tel = (p.telefono || '').replace(/\D/g,'');
-      const msg = encodeURIComponent(`¡Hola ${p.nombreReal}! Fuiste aceptado en el clan. Te esperamos hoy a la hora indicada en el juego. Únete al grupo: https://chat.whatsapp.com/Luo7MuQ8p0LLchLJA1CKSN`);
+      const msg = encodeURIComponent(`¡Hola ${p.nombreReal}! Fuiste aceptado en el clan. Te esperamos hoy a la hora indicada en el juego. Únete al grupo: ‎Abre este enlace para unirte a mi grupo de WhatsApp: https://chat.whatsapp.com/BCG3eXBzMTpKN7dWdl1poL?mode=gi_`);
 
       let accionesExtra = '';
       if(currentRole === 'superadmin'){
