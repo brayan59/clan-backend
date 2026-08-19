@@ -1,5 +1,5 @@
 // ⚠️ CONFIGURA AQUÍ TU URL DE BACKEND
-const BACKEND_URL = "https://clan-backend-cpu4.onrender.com"; // tu URL de Render
+const BACKEND_URL = "https://clan-backend-cpu4.onrender.com";
 
 let accountInfo = null;
 let puntajeTotal = 0;
@@ -136,31 +136,6 @@ function responderGenero(){
   showStep('q_whatsapp');
 }
 
-function responderObligatorio(campoId, errorId, pts, siguienteId){
-  const valor = document.getElementById(campoId).value.trim();
-  const errorEl = document.getElementById(errorId);
-  errorEl.style.display = 'none';
-
-  if(!valor){
-    errorEl.textContent = 'Este campo es obligatorio.';
-    errorEl.style.display = 'block';
-    return;
-  }
-
-  if(campoId === 'telefono'){
-    if(!/^\d{10}$/.test(valor)){
-      errorEl.textContent = 'El número debe tener exactamente 10 dígitos, solo números.';
-      errorEl.style.display = 'block';
-      return;
-    }
-  }
-
-  respuestas[campoId] = valor;
-  puntajeTotal += pts;
-  actualizarBarra();
-  showStep(siguienteId);
-}
-
 function responderSiNo(campoId, pts, siguienteId){
   const valor = document.getElementById(campoId).value;
   respuestas[campoId] = valor;
@@ -179,10 +154,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const telInput = document.getElementById('telefono');
   if(telInput){
     telInput.addEventListener('input', () => {
-      telInput.value = telInput.value.replace(/\D/g, '').slice(0, 10);
+      telInput.value = telInput.value.replace(/\D/g, '').slice(0, 15);
     });
   }
 });
+
+function responderTelefono(){
+  const lada = document.getElementById('paisLada').value;
+  const numero = document.getElementById('telefono').value.trim();
+  const errorEl = document.getElementById('error_whatsapp');
+  errorEl.style.display = 'none';
+
+  if(!numero){
+    errorEl.textContent = 'Este campo es obligatorio.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  if(!/^\d{5,15}$/.test(numero)){
+    errorEl.textContent = 'Ingresa solo números, sin espacios ni guiones.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  respuestas.telefono = lada + numero;
+  puntajeTotal += 10;
+  actualizarBarra();
+  showStep('q_cambionombre');
+}
 
 async function enviarPostulacion(){
   const error3 = document.getElementById('error3');
